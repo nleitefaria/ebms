@@ -1,5 +1,6 @@
-package com.nleitefaria.ebms;
+package com.nleitefaria.ebms.repository;
 
+import com.nleitefaria.ebms.entity.Employees;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
