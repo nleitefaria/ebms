@@ -24,5 +24,4 @@ public class EmployeeController {
         return employeeRepository.findByFirstName("Georgi");
     }
 
-
 }
