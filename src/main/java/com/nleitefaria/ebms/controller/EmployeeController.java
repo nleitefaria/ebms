@@ -1,5 +1,7 @@
-package com.nleitefaria.ebms;
+package com.nleitefaria.ebms.controller;
 
+import com.nleitefaria.ebms.repository.EmployeeRepository;
+import com.nleitefaria.ebms.entity.Employees;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,4 +1,4 @@
-package com.nleitefaria.ebms;
+package com.nleitefaria.ebms.entity;
 
 import jakarta.persistence.*;
 
