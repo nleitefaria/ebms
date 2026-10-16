@@ -1,7 +1,9 @@
 package com.nleitefaria.ebms.service;
 
 import com.nleitefaria.ebms.entity.Employees;
+import com.nleitefaria.ebms.event.EmployeeEvent;
 import com.nleitefaria.ebms.repository.EmployeeRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,9 +15,13 @@ import java.util.Optional;
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public EmployeeService(EmployeeRepository employeeRepository) {
+    public EmployeeService(
+            EmployeeRepository employeeRepository,
+            ApplicationEventPublisher eventPublisher) {
         this.employeeRepository = employeeRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     public List<Employees> findAll() {
@@ -44,11 +50,14 @@ public class EmployeeService {
 
     @Transactional
     public Employees save(Employees employee) {
-        return employeeRepository.save(employee);
+        Employees savedEmployee = employeeRepository.save(employee);
+        eventPublisher.publishEvent(EmployeeEvent.saved(savedEmployee.getEmpNo()));
+        return savedEmployee;
     }
 
     @Transactional
     public void deleteById(Integer empNo) {
         employeeRepository.deleteById(empNo);
+        eventPublisher.publishEvent(EmployeeEvent.deleted(empNo));
     }
 }
