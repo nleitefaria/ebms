@@ -1,7 +1,9 @@
 package com.nleitefaria.ebms.service;
 
 import com.nleitefaria.ebms.entity.Titles;
+import com.nleitefaria.ebms.event.TitleEvent;
 import com.nleitefaria.ebms.repository.TitleRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,9 +15,11 @@ import java.util.Optional;
 public class TitleService {
 
     private final TitleRepository titleRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public TitleService(TitleRepository titleRepository) {
+    public TitleService(TitleRepository titleRepository, ApplicationEventPublisher eventPublisher) {
         this.titleRepository = titleRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     public List<Titles> findAll() {
@@ -28,11 +32,14 @@ public class TitleService {
 
     @Transactional
     public Titles save(Titles title) {
-        return titleRepository.save(title);
+        Titles savedTitle = titleRepository.save(title);
+        eventPublisher.publishEvent(TitleEvent.saved(savedTitle));
+        return savedTitle;
     }
 
     @Transactional
     public void deleteById(Titles.Id id) {
         titleRepository.deleteById(id);
+        eventPublisher.publishEvent(TitleEvent.deleted(id));
     }
 }
